@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game Kelahiran Pancasila</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff8ef,#f4f8ff);color:#20243a}
+.wrap{max-width:1100px;margin:auto;padding:18px}.hero{background:linear-gradient(135deg,#c62828,#8e1b1b);color:#fff;border-radius:26px;padding:28px;text-align:center;box-shadow:0 12px 30px #0002}
+.hero h1{font-size:clamp(28px,5vw,46px);margin:0 0 7px}.hero p{margin:0;font-size:17px}.tag{display:inline-block;background:#fff;color:#c62828;font-weight:800;border-radius:99px;padding:7px 12px;margin-bottom:10px}
+.start,.panel{background:#fff;border:1px solid #e5e7ef;border-radius:20px;box-shadow:0 8px 24px #0000000d}.start{padding:18px;margin:16px 0}.row{display:flex;gap:10px;flex-wrap:wrap}.input{flex:1 1 300px}.input label{display:block;font-weight:800;margin-bottom:6px}.input input{width:100%;padding:13px;border:2px solid #e5e7ef;border-radius:13px;font-size:16px}
+.btn{border:0;border-radius:13px;padding:12px 17px;font-weight:800;cursor:pointer}.primary{background:#2563eb;color:#fff}.secondary{background:#eef1f6;color:#20243a}.green{background:#198754;color:#fff}.gold{background:#f4b942;color:#4a3500}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}.mode{border:2px solid transparent;background:#fff;border-radius:18px;padding:17px;text-align:left;cursor:pointer;box-shadow:0 7px 20px #0000000c}.mode.active{border-color:#2563eb;background:#f8fbff}.mode strong{display:block;font-size:20px;margin:5px 0}.mode small{color:#667085;line-height:1.4}
+.panel{padding:20px}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.pill{background:#fff3c9;color:#6a4800;border-radius:12px;padding:9px 13px;font-weight:800}
+.bar{height:10px;background:#edf0f5;border-radius:999px;overflow:hidden;margin:14px 0 20px}.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f4b942,#ff7b00);transition:.25s}
+.hidden{display:none!important}
+.boxes{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.box{aspect-ratio:1/1;border:0;border-radius:17px;background:linear-gradient(145deg,#d32f2f,#9d1c1c);color:#fff;font-size:31px;font-weight:900;cursor:pointer;box-shadow:0 7px 15px #0002}.box:hover{transform:translateY(-2px)}.box.used{background:#dfe3eb;color:#6b7280;cursor:default}
+.qpanel{margin-top:17px;background:#fafbff;border:1px solid #e5e7ef;border-radius:17px;padding:17px}.qtitle{font-size:21px;font-weight:900;line-height:1.4;margin-bottom:14px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{border:2px solid #e5e7ef;background:#fff;border-radius:13px;padding:13px;text-align:left;font-size:15px;cursor:pointer}.opt.correct{background:#ebfff6;border-color:#7bcfa8}.opt.wrong{background:#fff1f1;border-color:#efaaa5}.feedback{display:none;margin-top:12px;padding:13px;border-radius:13px;line-height:1.45;font-weight:700}.feedback.show{display:block}
+.score{font-size:30px;font-weight:900;color:#c62828;text-align:center;margin:7px 0}.result{text-align:center;background:#fafbff;border:2px dashed #dfe3ea;border-radius:16px;padding:21px;margin-top:17px}
+.events{display:grid;gap:10px}.event{display:flex;align-items:flex-start;gap:10px;border:2px solid #e5e7ef;background:#fff;border-radius:14px;padding:12px;cursor:grab}.event.drag{opacity:.45}.num{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#20243a;color:#fff;font-weight:900;flex:0 0 34px}.handle{font-size:21px;margin-top:4px}.date{font-weight:900;color:#c62828}.event small{display:block;color:#667085;margin-top:4px;line-height:1.4}.msg{display:none;margin-top:14px;padding:13px;border-radius:13px;font-weight:800;line-height:1.45}.msg.show{display:block}
+.controls{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:17px}.note{font-size:13px;color:#667085;line-height:1.5;margin-top:7px}
+@media(max-width:760px){.modes{grid-template-columns:1fr}.boxes{grid-template-columns:repeat(3,1fr)}.opts{grid-template-columns:1fr}.hero{padding:23px 16px}.panel{padding:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+<div class="tag">GAME EDUKATIF • SEJARAH</div>
+<h1>Kelahiran Pancasila</h1>
+<p>🎯 Kuis Tokoh &nbsp; • &nbsp; 🧩 Susun Urutan Peristiwa</p>
+</section>
+
+<section class="start">
+<div class="row">
+<div class="input"><label>Nama Pemain</label><input id="name" placeholder="Contoh: Aisyah" maxlength="35"></div>
+<button class="btn primary" onclick="start()">▶ Mulai Bermain</button>
+</div>
+<div class="note">Mode kuis dibuat seperti aktivitas “Membuka Kotak” pada Wordwall, lalu dilanjutkan dengan tantangan kronologi.</div>
+</section>
+
+<div id="game" class="hidden">
+<div class="modes">
+<button id="m1" class="mode active" onclick="mode('quiz')">🎯 <strong>Kuis Tokoh</strong><small>Buka kotak secara acak dan jawab pertanyaan tentang tokoh serta peristiwa penting.</small></button>
+<button id="m2" class="mode" onclick="mode('timeline')">🧩 <strong>Susun Peristiwa</strong><small>Seret kartu dan susun kronologi dari 29 Mei sampai 18 Agustus 1945.</small></button>
+</div>
+
+<section id="quiz" class="panel">
+<div class="top"><div><b id="playerLabel">Pemain</b><div class="note">Pilih satu kotak. Setiap kotak berisi satu soal.</div></div><div class="pill">Skor: <span id="score">0</span>/100</div></div>
+<div class="bar"><i id="bar"></i></div>
+<div id="boxes" class="boxes"></div>
+<div id="questionPanel" class="qpanel hidden">
+<div id="question" class="qtitle"></div>
+<div id="options" class="opts"></div>
+<div id="feedback" class="feedback"></div>
+<div class="controls"><button class="btn secondary" onclick="closeQuestion()">Tutup Soal</button><button id="nextBox" class="btn primary hidden" onclick="closeQuestion()">Pilih Kotak Berikutnya</button></div>
+</div>
+<div id="quizResult" class="result hidden"><b>🏆 Kuis selesai!</b><div id="scoreBig" class="score">0/100</div><div id="resultText"></div><div class="controls"><button class="btn secondary" onclick="resetQuiz()">Main Lagi</button><button class="btn green" onclick="mode('timeline')">Lanjut ke Susun Peristiwa →</button></div></div>
+</section>
+
+<section id="timeline" class="panel hidden">
+<div class="top"><div><b>Mode 2 • Susun Peristiwa</b><div class="note">Urutkan dari peristiwa paling awal ke paling akhir.</div></div><div class="pill">Poin: <span id="tScore">0</span></div></div>
+<div class="qpanel" style="margin-top:15px">💡 <b>Petunjuk utama:</b> 29 Mei → 31 Mei → 1 Juni → 22 Juni → 18 Agustus 1945.</div>
+<div id="events" class="events" style="margin-top:15px"></div>
+<div id="tMsg" class="msg"></div>
+<div class="controls"><button class="btn secondary" onclick="shuffleTimeline()">🔀 Acak Kartu</button><button class="btn green" onclick="checkTimeline()">✅ Periksa Urutan</button></div>
+</section>
+</div>
+
+<div class="note" style="text-align:center;margin:20px 0 4px">Materi mengikuti alur presentasi: tokoh perumus, gagasan 29 Mei–1 Juni 1945, Panitia Sembilan & Piagam Jakarta, lalu pengesahan 18 Agustus 1945.</div>
+</div>
+<script>
+const Q=[
+["29 Mei 1945: Tokoh yang menyampaikan gagasan tentang dasar negara adalah ...",["Muhammad Yamin","Soepomo","Soekarno","Radjiman"],0,"Muhammad Yamin menyampaikan gagasan pada 29 Mei 1945."],
+["31 Mei 1945: Tokoh yang menyampaikan gagasan tentang dasar negara adalah ...",["Soepomo","Muhammad Yamin","Soekarno","Mohammad Hatta"],0,"Soepomo menyampaikan gagasan pada 31 Mei 1945."],
+["1 Juni 1945: Siapa yang menyampaikan pidato penting tentang dasar negara dan memperkenalkan istilah Pancasila?",["Soepomo","Soekarno","Yamin","Radjiman"],1,"Soekarno menyampaikan pidato pada 1 Juni 1945."],
+["Siapakah ketua BPUPKI?",["Mohammad Hatta","Soepomo","Dr. Radjiman Wedyodiningrat","Soekarno"],2,"Dr. Radjiman Wedyodiningrat adalah ketua BPUPKI."],
+["Panitia yang merumuskan Piagam Jakarta pada 22 Juni 1945 adalah ...",["PPKI","Panitia Sembilan","BPUPKI","KNIP"],1,"Panitia Sembilan berperan penting dalam perumusan Piagam Jakarta."],
+["Tanggal Piagam Jakarta dirumuskan adalah ...",["1 Juni 1945","18 Agustus 1945","22 Juni 1945","29 Mei 1945"],2,"Piagam Jakarta dirumuskan pada 22 Juni 1945."],
+["Lembaga yang mengesahkan UUD 1945 pada 18 Agustus 1945 adalah ...",["BPUPKI","PPKI","Panitia Sembilan","KNIP"],1,"PPKI mengesahkan UUD 1945 pada 18 Agustus 1945."],
+["Rumusan Pancasila yang menjadi dasar negara tercantum dalam ...",["Pembukaan UUD 1945","Batang Tubuh UUD 1945","Pidato 1 Juni","Piagam Jakarta"],0,"Rumusan Pancasila tercantum dalam Pembukaan UUD 1945."],
+["Manakah urutan yang tepat?",["1 Juni → 22 Juni → 18 Agustus","22 Juni → 1 Juni → 18 Agustus","18 Agustus → 1 Juni → 22 Juni","31 Mei → 18 Agustus → 29 Mei"],0,"Urutan tiga tanggal kunci itu adalah 1 Juni, 22 Juni, lalu 18 Agustus 1945."],
+["Proses kelahiran Pancasila dapat diingat dengan pola ...",["Gagasan → perumusan → penyempurnaan → pengesahan","Sidang → perang → pemilu → merdeka","Tokoh → tempat → lagu → bendera","Membaca → menulis → menghitung → menggambar"],0,"Empat tahap pengingatnya adalah gagasan, perumusan, penyempurnaan, dan pengesahan."]
+];
+const T=[
+["a","29 Mei 1945","Muhammad Yamin menyampaikan gagasan tentang dasar negara","Tahap gagasan dalam sidang pertama BPUPKI."],
+["b","31 Mei 1945","Soepomo menyampaikan gagasan tentang dasar negara","Tahap gagasan dalam sidang pertama BPUPKI."],
+["c","1 Juni 1945","Soekarno menyampaikan pidato tentang dasar negara","Istilah Pancasila diperkenalkan dalam pidato penting ini."],
+["d","22 Juni 1945","Panitia Sembilan merumuskan Piagam Jakarta","Tahap penting dalam perumusan dasar negara."],
+["e","18 Agustus 1945","PPKI mengesahkan UUD 1945","Rumusan Pancasila tercantum dalam Pembukaan UUD 1945."]
+];
+let player="Pemain",score=0,opened=0,current=-1,tScore=0;
+
+function start(){player=document.getElementById("name").value.trim()||"Pemain";document.getElementById("game").classList.remove("hidden");document.getElementById("playerLabel").textContent="Pemain: "+player;resetQuiz();shuffleTimeline();document.getElementById("game").scrollIntoView({behavior:"smooth"});}
+function mode(m){document.getElementById("quiz").classList.toggle("hidden",m!="quiz");document.getElementById("timeline").classList.toggle("hidden",m!="timeline");document.getElementById("m1").classList.toggle("active",m=="quiz");document.getElementById("m2").classList.toggle("active",m=="timeline");}
+function resetQuiz(){score=0;opened=0;current=-1;document.getElementById("score").textContent=0;document.getElementById("bar").style.width=0;document.getElementById("quizResult").classList.add("hidden");document.getElementById("questionPanel").classList.add("hidden");let b=document.getElementById("boxes");b.innerHTML="";Q.forEach((x,i)=>{let d=document.createElement("button");d.className="box";d.textContent="?";d.onclick=()=>openBox(d,i);b.appendChild(d);});}
+function openBox(btn,i){if(btn.classList.contains("used"))return;btn.classList.add("used");btn.textContent="✓";opened++;current=i;let q=Q[i];document.getElementById("question").textContent=(i+1)+". "+q[0];let o=document.getElementById("options");o.innerHTML="";q[1].forEach((x,n)=>{let b=document.createElement("button");b.className="opt";b.textContent=x;b.onclick=()=>answer(b,n);o.appendChild(b)});let f=document.getElementById("feedback");f.className="feedback";f.innerHTML="";document.getElementById("nextBox").classList.add("hidden");document.getElementById("questionPanel").classList.remove("hidden");}
+function answer(btn,n){let q=Q[current];document.querySelectorAll("#options .opt").forEach(x=>x.disabled=true);let f=document.getElementById("feedback");if(n===q[2]){score+=10;btn.classList.add("correct");f.style.background="#ebfff6";f.style.border="2px solid #a7dfc3";f.innerHTML="✅ Benar! "+q[3];}else{btn.classList.add("wrong");document.querySelectorAll("#options .opt")[q[2]].classList.add("correct");f.style.background="#fff5ed";f.style.border="2px solid #f0c48f";f.innerHTML="❌ Belum tepat. Jawaban benar: <b>"+q[1][q[2]]+"</b><br>"+q[3];}document.getElementById("score").textContent=score;document.getElementById("bar").style.width=(opened/Q.length*100)+"%";f.classList.add("show");document.getElementById("nextBox").classList.remove("hidden");if(opened===Q.length)setTimeout(finishQuiz,350);}
+function closeQuestion(){document.getElementById("questionPanel").classList.add("hidden");if(opened===Q.length)finishQuiz();}
+function finishQuiz(){document.getElementById("quizResult").classList.remove("hidden");document.getElementById("scoreBig").textContent=score+"/100";let t=score>=90?"🏆 Luar biasa!":score>=70?"🥇 Sangat baik!":score>=50?"🥈 Cukup baik!":"🌱 Tetap semangat!";document.getElementById("resultText").textContent=t+" "+player+" sudah menyelesaikan kuis tokoh dan peristiwa.";}
+function shuffleArray(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+function shuffleTimeline(){document.getElementById("tMsg").className="msg";document.getElementById("tMsg").innerHTML="";renderTimeline(shuffleArray(T));}
+function renderTimeline(list){let c=document.getElementById("events");c.innerHTML="";list.forEach((e,i)=>{let d=document.createElement("div");d.className="event";d.draggable=true;d.dataset.id=e[0];d.innerHTML='<div class="handle">☰</div><div class="num">'+(i+1)+'</div><div><div class="date">'+e[1]+'</div><b>'+e[2]+'</b><small>'+e[3]+'</small></div>';d.addEventListener("dragstart",()=>d.classList.add("drag"));d.addEventListener("dragend",()=>d.classList.remove("drag"));d.addEventListener("dragover",e=>e.preventDefault());d.addEventListener("drop",e=>{e.preventDefault();let moving=c.querySelector(".drag");if(!moving||moving===d)return;let r=d.getBoundingClientRect();c.insertBefore(moving,e.clientY<r.top+r.height/2?d:d.nextSibling);renumber();});c.appendChild(d);});}
+function renumber(){document.querySelectorAll("#events .num").forEach((n,i)=>n.textContent=i+1)}
+function checkTimeline(){let ids=[...document.querySelectorAll("#events .event")].map(x=>x.dataset.id),correct=T.map(x=>x[0]);let m=document.getElementById("tMsg");if(ids.join()==correct.join()){tScore+=10;document.getElementById("tScore").textContent=tScore;m.style.background="#ebfff6";m.style.border="2px solid #a7dfc3";m.innerHTML="🎉 <b>Benar!</b> Kronologinya tepat: 29 Mei → 31 Mei → 1 Juni → 22 Juni → 18 Agustus 1945.";}else{m.style.background="#fff5ed";m.style.border="2px solid #f0c48f";m.innerHTML="🔎 Belum tepat. Gunakan tanggal pada kartu untuk menyusun dari yang paling awal."; }m.classList.add("show");}
+</script>
+</body>
+</html>
